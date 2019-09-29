@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>国庆安排</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				border:0;
+			}
+			body{
+				background-color:#1C1C1C;
+			}
+			#container {
+				width: 310px;
+				height: 310px;
+				margin: 200px auto;
+				color: white;
+			}
+			
+			#oUl {
+				width: 310px;
+				height: 310px;
+				list-style: none;
+			}
+			#oUl li,
+			#oUl a {
+				width: 100px;
+				height: 100px;
+				border: 2px solid green;
+				float: left;
+				text-align: center;
+				line-height: 100px;
+				position: relative;
+				box-sizing: border-box;
+				margin-left: 2px;
+				margin-top: 2px;
+			}
+			#oUl li .mask{
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left:0;
+				top:0;
+				background: url(images/mask.png) no-repeat;
+				background-size: cover;
+				display: none;
+			}
+			#oUl a:hover {
+				cursor: pointer;
+				color: orange;
+				font-size: 18px;
+			}
+			#oUl .active .mask{
+				display: block;
+			}
+			#page {
+				line-height: 32px;
+				color: #9a9a9a;
+				text-align: center;
+				position:absolute;
+				left: 50%;
+				top: 100px;
+				width: 300px;
+				height: 50px;
+				margin-left: -150px;
+				display: none;
+				line-height: 50px;
+				background: green;
+				color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container">
+			<ul id="oUl">
+				<li>打游戏<div class="mask"></div></li>
+				<li>北京<div class="mask"></div></li>
+				<li>电音节<div class="mask"></div></li>
+				<li>苏州<div class="mask"></div></li>
+				<a>开始</a>
+				<li>杭州<div class="mask"></div></li>
+				<li>美食节<div class="mask"></div></li>
+				<li>上海<div class="mask"></div></li>
+				<li>豪车展<div class="mask"></div></li>
+			</ul>
+			<div id="page"></div>
+		</div>
+		<script>
+			var container = document.getElementById('container'),
+				li = container.getElementsByTagName('li'),
+				aa = container.getElementsByTagName('a')[0],
+				page = document.getElementById('page'),
+				timer = null;
+				bReady = false;
+			
+			var order = [0,1,2,4,7,6,5,3];
+			function start(num,str) {
+				var i = 0;
+				var t =60;
+				var round = 10;
+				var rNum = round*8;
+				
+				timer = setTimeout(setFreq, t);
+				function setFreq() {
+					for(var j = 0; j < li.length; j++) {
+						li[j].className = '';
+					}
+					var ord = order[i%li.length];
+					li[ord].className = "active";
+					i++;
+					if(i<rNum){
+						timer = setTimeout(setFreq, t);
+					}else if(i>= rNum-8 && i< rNum+num){
+						t+=(i-rNum+8)*5;
+						timer = setTimeout(setFreq, t);
+					}
+					if( i >= rNum+num){
+						page.innerHTML="孩子醒醒该吃土了....";
+						// page.innerHTML="醒醒孩子该吃土了" + num + str +"" ;
+						var timer2 = null;
+						timer2 = setTimeout(function(){
+							page.style.display="block";
+							clearTimeout(timer2);
+						},1000);
+						bReady = false;
+						clearTimeout(timer);
+					}
+					
+				}
+			}
+			var num = 0;
+			aa.onclick = function() {
+				/*'1-8'*/
+				if(bReady) return false;
+				page.style.display="none";
+				bReady = true;
+				num = random(1,9)
+				console.log(num)
+				start(num," ");
+			}
+			
+			function random(n, m) {
+				return parseInt((m - n) * Math.random() + n);
+			}
+		</script>
+	</body>
+
+</html>
